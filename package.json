@@ -1,0 +1,51 @@
+{
+  "name": "@josh803316/shared-config",
+  "version": "1.0.0",
+  "description": "Shared compiler/linter/formatter configs for all @josh803316 projects",
+  "type": "commonjs",
+  "scripts": {
+    "postinstall": "bun scripts/install-husky-hooks.ts || true",
+    "prepare": "husky",
+    "fmt": "prettier -wu",
+    "compile": "tsc",
+    "lint": "eslint",
+    "lint:summary": "bun run lint -- -f summary",
+    "lint:inspect": "eslint-config-inspector",
+    "lint:nibble": "eslint-nibble"
+  },
+  "exports": {
+    "./eslint.config.js": "./eslint.config.js",
+    "./prettier.config.js": "./prettier.config.js",
+    "./lint-staged.config.js": "./lint-staged.config.js",
+    "./tsconfig.json": "./tsconfig.json",
+    "./tsconfig.node.json": "./tsconfig.node.json"
+  },
+  "dependencies": {
+    "@eslint/config-inspector": "^1.2.0",
+    "@eslint/js": "^9.35.0",
+    "@types/bun": "^1.2.22",
+    "@types/eslint__js": "^9.14.0",
+    "@types/node": "^24.5.0",
+    "eslint": "^9.35.0",
+    "eslint-formatter-summary": "^2.0.2",
+    "eslint-nibble": "^9.0.0",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6",
+    "prettier": "^3.6.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.0"
+  },
+  "trustedDependencies": [
+    "@josh803316/shared-config",
+    "esbuild",
+    "sharp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/josh803316/shared-config.git"
+  },
+  "engines": {
+    "npm": "****** PLEASE USE 'bun install', NPM IS NOT SUPPORTED ******"
+  }
+}

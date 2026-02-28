@@ -1,0 +1,14 @@
+name: Release shared-config
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    uses: josh803316/shared-ci-workflows/.github/workflows/semantic-release-shared-libs.yml@main
+    with:
+      repository: shared-config
+      publish: 'true'
+    secrets: inherit
