@@ -69,6 +69,12 @@ module.exports = defineConfig(
 
       // ensure switch covers all cases of enums/unions
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
+
+      // enforce `import type` for type-only imports — pairs with verbatimModuleSyntax
+      '@typescript-eslint/consistent-type-imports': ['error', {prefer: 'type-imports', fixStyle: 'inline-type-imports'}],
+
+      // prevent `import type` from importing modules that have side effects
+      '@typescript-eslint/no-import-type-side-effects': 'error',
     },
   },
 

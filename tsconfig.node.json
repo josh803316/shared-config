@@ -1,18 +1,28 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "es2022",
+    // Environment
+    "target": "ES2022",
+    "lib": ["ES2022"],
+
+    // Module — Node.js CommonJS
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "skipLibCheck": true,
+    "esModuleInterop": true,
+
+    // Emit
     "outDir": "dist",
     "declaration": true,
+    "skipLibCheck": true,
+
+    // Strictness
     "strict": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
     "allowUnusedLabels": false,
-    "esModuleInterop": true
+    "allowUnreachableCode": false
   }
 }
