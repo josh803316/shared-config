@@ -53,7 +53,7 @@ function extractIssueId(branchName: string, commitMessage: string): string | nul
   // Then try existing commit message
   const commitMatch = commitMessage.match(new RegExp(`\\[${ISSUE_PREFIX}-\\d+\\]`, 'i'));
   if (commitMatch) {
-    return commitMatch[0].replace(/[\[\]]/g, '').toUpperCase();
+    return commitMatch[0].replace(/[[\]]/g, '').toUpperCase();
   }
 
   return null;
