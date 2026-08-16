@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    // ── Incremental-strictness profile ─────────────────────────────────────
+    // Intended for mature / legacy consumers adopting @josh803316/shared-config
+    // (e.g. projects coming off ESLint/typescript-eslint or an old lax tsconfig).
+    //
+    // Strategy: enable SAFETY-oriented checks now (they catch real runtime bugs
+    // and are cheap to satisfy), and DEFER cleanup-oriented rules (noUnused*,
+    // noImplicitReturns) that can produce hundreds of violations in a mature
+    // codebase. Roll the cleanup rules on in a later pass once adoption lands.
+    //
+    // Forward path:
+    //   migration.json (safety first)  →  strict.json (full cleanup)  →  api/bun/ui
+    //
+    // Overrides inherited from base.json that are NOT migration-safe:
+    //   - allowUnreachableCode/allowUnusedLabels: flipped back on here because
+    //     legacy builders and generated code commonly leave these behind.
+
+    // Runtime-correctness — keep everything base.json enables that is safe.
+    // base.json already sets: strict, noUncheckedIndexedAccess, noImplicitOverride,
+    // noFallthroughCasesInSwitch, noUncheckedSideEffectImports, forceConsistentCasingInFileNames.
+
+    // Cleanup-oriented — left OFF for migration so a team can adopt without
+    // first deleting every unused symbol or annotating every return path.
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true,
+
+    // Legacy toolchains (typescript-eslint, third-party builders) may emit
+    // non-emittable syntax; keep the type-checker permissive about module discipline
+    // until the codebase is ready for verbatimModuleSyntax.
+    "verbatimModuleSyntax": false,
+
+    // Type-check only — Bun/Vite are the emitters in this ecosystem. Explicitness
+    // prevents a consumer running `tsc -p migration.json` from emitting JS next to
+    // source while adopting. Override to noEmit:false only if the project truly
+    // emits through tsc.
+    "noEmit": true
+  }
+}

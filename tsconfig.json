@@ -1,40 +1,22 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig/base.json",
   "compilerOptions": {
-    // Environment
-    "target": "ESNext",
-    "lib": ["ESNext"],
-
-    // Module — bundler mode (Bun, Vite, esbuild, etc.)
+    // Module — Bun-native; tsc is type-check only for this repo (Bun runs the scripts)
     "module": "Preserve",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
-    "resolveJsonModule": true,
-
-    // JSX (override per-project if not using React)
-    "jsx": "react-jsx",
-
-    // Emit
-    "noEmit": true,
-    "skipLibCheck": true,
-
-    // Type safety
     "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
+    "noEmit": true,
+
+    // JSX default inherited from base.json (react-jsx) is not used here; keep preserve.
+    "jsx": "preserve",
 
     // Bun types (required for TypeScript 6+ when using bun APIs in scripts)
     "types": ["bun"],
 
-    // Strictness
-    "strict": true,
-    "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-    "erasableSyntaxOnly": true,
-    "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false
+    // erasableSyntaxOnly: this repo's scripts run under Bun --strip-types, keep on
+    "erasableSyntaxOnly": true
   }
 }

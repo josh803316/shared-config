@@ -1,2 +1,9 @@
-#\!/bin/sh
-bun bin/commit-msg.ts "$1"
+#!/bin/sh
+# Conventional-commit validator, shipped inside @josh803316/shared-config.
+# This file is invoked in two contexts and must work in both:
+#   1. Consumer  — installed at node_modules/@josh803316/shared-config/.husky/commit-msg
+#   2. This repo — at .husky/commit-msg (the package source, not self-installed)
+# Resolve the package root from this hook's own location (one level above .husky/)
+# so the bin/ delegate is found regardless of context.
+root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+bun "$root/bin/commit-msg.ts" "$1"

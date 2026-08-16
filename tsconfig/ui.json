@@ -2,6 +2,13 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
+    // Module — Vite native bundler resolution; tsc is type-check only (Vite emits)
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+
     // ES2023: stable, supported in all modern browsers, avoids ESNext instability.
     // Update to ES2024 intentionally when verifying Object.groupBy / Promise.withResolvers
     // browser support for your target audience.

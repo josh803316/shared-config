@@ -1,2 +1,7 @@
-#\!/bin/sh
-bun bin/pre-commit.ts
+#!/bin/sh
+# Pre-commit hook (lint-staged), shipped inside @josh803316/shared-config.
+# See .husky/commit-msg for the dual-context resolution model: root is derived
+# from this hook's own location, so bin/ is found from a consumer install and
+# from the package source repo alike.
+root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+bun "$root/bin/pre-commit.ts"

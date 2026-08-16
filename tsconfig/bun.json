@@ -2,6 +2,13 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
+    // Module — Bun-native bundler resolution; tsc is type-check only (Bun emits)
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+
     // Bun-native scripts: ESNext only. No DOM — Bun CLIs don't have window/document.
     // Bun's own Web-compatible APIs (fetch, Request, Response, Headers) are covered by
     // @types/bun, not the DOM lib. Adding DOM would mask real "not available at runtime" errors.

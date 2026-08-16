@@ -14,12 +14,14 @@ It exports: tsconfig profiles, biome.json, lint-staged config, and husky hooks.
 
 | Export | Used by |
 |--------|---------|
-| `tsconfig/base.json` | all TS projects |
-| `tsconfig/api.json` | ribeye-public-api (Bun+Elysia+Drizzle) |
+| `tsconfig/base.json` | composition-neutral strict base (no emit/module assumptions) |
+| `tsconfig/api.json` | api (Bun+Elysia+Drizzle) |
 | `tsconfig/bun.json` | shared-ci-workflows, scripts |
-| `tsconfig/ui.json` | flank-20 (React+Vite), ribeye-public-ui |
+| `tsconfig/ui.json` | ui (React+Vite) |
 | `tsconfig/node-esm.json` | shared-config itself, published npm packages |
-| `tsconfig/test.json` | shared-test-automation (Playwright+Vitest) |
+| `tsconfig/node-cjs.json` | Node CommonJS packages that emit (TS7-safe) |
+| `tsconfig/migration.json` | mature/legacy adopters (incremental strictness) |
+| `tsconfig/test.json` | test-automation (Playwright+Vitest) |
 | `biome.json` | all repos via `extends` |
 | `lint-staged.config.js` | all repos via postinstall hook |
 
@@ -30,6 +32,8 @@ bun install           # install deps
 bun run lint          # biome check .
 bun run format        # biome format --write .
 bun run typecheck     # tsc --noEmit
+bun run test          # pack → fixture-install → verify every export + shipped hook
+bun run preflight:auth # validate GitHub Packages auth
 ```
 
 ## Scripting and automation
@@ -52,7 +56,7 @@ Prefer extending existing TypeScript tooling in this repo over parallel utilitie
 - **`import type`**: All type-only imports must use `import type { ... }`. Biome `useImportType` enforces this.
 - **No enums**: TypeScript 7 era — use `as const` objects or string unions instead of `enum`.
   `erasableSyntaxOnly: true` in api.json and bun.json makes enums a type error in new repos.
-  Not in base.json so legacy repos (ribeye-api, cortanha-core) can adopt at their own pace.
+  Not in base.json so legacy repos (api, cortanha-core) can adopt at their own pace.
 - **No namespace syntax**: Use ES modules only (`import`/`export`).
 - **No parameter properties**: `constructor(private x: string)` is not erasable. Use explicit `this.x = x`.
 
@@ -64,6 +68,8 @@ Prefer extending existing TypeScript tooling in this repo over parallel utilitie
 | React+Vite UI | `@josh803316/shared-config/tsconfig/ui.json` |
 | Bun scripts / CI tools | `@josh803316/shared-config/tsconfig/bun.json` |
 | Published npm package (Node ESM) | `@josh803316/shared-config/tsconfig/node-esm.json` |
+| Published npm package (Node CJS) | `@josh803316/shared-config/tsconfig/node-cjs.json` |
+| Legacy / incremental adoption | `@josh803316/shared-config/tsconfig/migration.json` |
 | Playwright / test automation | `@josh803316/shared-config/tsconfig/test.json` |
 
 ## PR hygiene
@@ -76,9 +82,12 @@ Prefer extending existing TypeScript tooling in this repo over parallel utilitie
 ## What NOT to do
 
 - Do not add `skipLibCheck: false` — it breaks typebox/elysia version-skew compatibility
-- Do not add `noEmit: false` to base.json — Bun/Vite are the emitters, not tsc
+- Do not add `noEmit: false` to base.json — Bun/Vite are the emitters, not tsc; base.json must stay emit-neutral
+- Do not re-add `allowImportingTsExtensions`/`verbatimModuleSyntax`/`noEmit`/`module`/`moduleResolution` to base.json — they belong in leaf profiles (api/bun/ui set `noEmit`+bundler; node-esm emits)
 - Do not add `experimentalDecorators: true` — Elysia uses builder pattern, not decorators
-- Do not change `verbatimModuleSyntax: false` — required for correct `import type` enforcement
+- Do not change `verbatimModuleSyntax: false` in node-cjs.json — CommonJS emission needs type-import elision
+- Do not bump the peer `typescript` range below `>=5.9.0` — the ecosystem spans TS 5.9/6/7 and `typescript-eslint` only supports ≤6.1
+- Do not turn `typescript` back into a regular dependency — it must stay a peer so consumers control their own TS major
 - Do not add `allowSyntheticDefaultImports` explicitly — implied by the module settings
 - Do not add ESLint — Biome replaces both ESLint and Prettier in this stack
 - Do not run `biome check --fix` mid-edit in hooks — use `biome format --write` in hooks only;

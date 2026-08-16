@@ -15,6 +15,10 @@
     // NodeNext resolution doesn't allow .ts extension imports
     "allowImportingTsExtensions": false,
 
+    // ESM emission requires explicit type-only imports; verbatimModuleSyntax is the
+    // correct (and now explicit) enforcement for a NodeNext ESM emitter.
+    "verbatimModuleSyntax": true,
+
     "jsx": "preserve",
 
     // Emit is on for published packages: .js output + declarations + source maps

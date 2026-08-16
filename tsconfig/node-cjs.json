@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    // ── Node.js CommonJS profile (TypeScript 7-compatible) ─────────────────
+    // For Node packages that emit CommonJS. Prefer node-esm.json for new work,
+    // but this profile keeps legacy CJS packages on a supported, TS-7-safe toolchain.
+    //
+    // moduleResolution: legacy "node" was removed in TypeScript 7. The renamed
+    // value is "node10" — it is accepted by both TS 6 and TS 7, so this profile
+    // pins it explicitly rather than relying on a deprecated alias.
+
+    // Environment — Node 22+ (LTS) supports ES2024 fully
+    "target": "ES2024",
+    "lib": ["ES2024"],
+
+    // Module — CommonJS with the TS6/TS7-compatible node10 resolver
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    // Node packages don't transpile JSX (match node-esm.json rather than inheriting
+    // base.json's react-jsx transform into CJS output).
+    "jsx": "preserve",
+
+    // Emit
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+
+    // CJS emission: verbatimModuleSyntax would force `import type` that tsc then
+    // cannot elide cleanly to require() in CommonJS output — leave it off here.
+    "verbatimModuleSyntax": false,
+
+    // Strictness
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}

@@ -2,6 +2,13 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "./base.json",
   "compilerOptions": {
+    // Module — Bun-native bundler resolution; tsc is type-check only (Bun emits)
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+
     // Bun APIs + Web Standard APIs (Request, Response, Headers, WebSocket)
     "lib": ["ESNext", "DOM"],
 
