@@ -4,6 +4,7 @@
     // Environment
     "target": "ESNext",
     "lib": ["ESNext"],
+    "types": ["bun"],
 
     // Module — bundler mode (Bun, Vite, esbuild, etc.)
     "module": "Preserve",
