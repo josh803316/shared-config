@@ -30,6 +30,16 @@
     "allowUnreachableCode": true,
     "allowUnusedLabels": true,
 
+    // Module resolution — base.json is composition-neutral and intentionally
+    // omits module/moduleResolution. Provide safe bundler-mode defaults here so
+    // legacy adopters don't silently fall back to TypeScript's ancient CommonJS
+    // + node10 defaults (which reject .ts extension imports and fail on ESM-only
+    // packages). Bundler mode matches webpack/Vite/esbuild — the runtimes legacy
+    // projects almost always use. Override to NodeNext for Node-emitting packages.
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+
     // Legacy toolchains (typescript-eslint, third-party builders) may emit
     // non-emittable syntax; keep the type-checker permissive about module discipline
     // until the codebase is ready for verbatimModuleSyntax.
