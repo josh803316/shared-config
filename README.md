@@ -1,105 +1,119 @@
 # @josh803316/shared-config
 
-Shared TypeScript, ESLint, Prettier, and commit-hook configs for all `@josh803316` projects.
+Shared compiler, linter, and formatter configurations for all `@josh803316` TypeScript/JS projects.
 
-Designed to be consumed by: `lll-experience`, `elysia-playground`, `how-ad-tech-works`.
+Includes:
+
+| Config | Purpose |
+|---|---|
+| `biome.json` | Biome linter + formatter (opinionated rule set) |
+| `tsconfig/base.json` | Strict ESNext base — bundler module resolution |
+| `tsconfig/ui.json` | Browser / React UI projects (DOM + DOM.Iterable libs) |
+| `tsconfig/api.json` | Server-side API projects (strict, no DOM) |
+| `tsconfig/bun.json` | Pure Bun scripts / CLI tools (bun-types) |
+| `tsconfig/node-esm.json` | Node.js ESM packages that emit `.js` + `.d.ts` |
+| `tsconfig.node.json` | Legacy Node.js CommonJS projects |
+| `lint-staged.config.js` | lint-staged preset (TS/JS → biome check; prose → biome format) |
+| `bin/commit-msg.ts` | Conventional-commit message validator with interactive repair |
+| `bin/pre-commit.ts` | Pre-commit hook (runs lint-staged) |
 
 ## Installation
 
-```sh
+```bash
 bun add -D @josh803316/shared-config
 ```
 
-After install you can remove `typescript`, `typescript-eslint`, `eslint`, and `prettier` from your own
-`package.json` — this package re-exports consistent versions of all of them.
+Git hooks are installed automatically via the `postinstall` script. To force-reinstall or update stale hooks:
 
-Add the following to your `package.json`:
+```bash
+bun node_modules/@josh803316/shared-config/scripts/install-husky-hooks.ts --force
+```
 
-```json
+## Usage
+
+### TypeScript
+
+Extend the appropriate preset in your project's `tsconfig.json`:
+
+```jsonc
+// UI / React app
+{ "extends": "@josh803316/shared-config/tsconfig/ui.json" }
+
+// Node API
+{ "extends": "@josh803316/shared-config/tsconfig/api.json" }
+
+// Bun script / CLI
+{ "extends": "@josh803316/shared-config/tsconfig/bun.json" }
+
+// Node ESM package (emits JS + .d.ts)
+{ "extends": "@josh803316/shared-config/tsconfig/node-esm.json" }
+```
+
+Most projects should add project-specific `include`/`exclude` arrays on top:
+
+```jsonc
 {
-  "scripts": {
-    "prepare": "husky",
-    "fmt": "prettier -wu",
-    "compile": "tsc",
-    "lint": "eslint .",
-    "lint:summary": "bun run lint -- -f summary",
-    "lint:inspect": "eslint-config-inspector"
+  "extends": "@josh803316/shared-config/tsconfig/ui.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
   },
-  "trustedDependencies": ["@josh803316/shared-config", "esbuild", "sharp"]
+  "include": ["src", "vite.config.ts"]
 }
 ```
 
-## Configs
+### Biome
 
-### TypeScript (`tsconfig.json`)
-
-For modern runtimes (Bun, TSX) or bundlers (Vite, ESBuild):
-
-```json
+```jsonc
+// biome.json
 {
-  "extends": "@josh803316/shared-config/tsconfig.json",
-  "exclude": ["dist/"]
+  "extends": ["@josh803316/shared-config/biome.json"]
 }
 ```
 
-For Node.js (tsc output or ts-node):
+### lint-staged
 
-```json
-{
-  "extends": "@josh803316/shared-config/tsconfig.node.json",
-  "exclude": ["dist/"]
+```js
+// lint-staged.config.js
+module.exports = require('@josh803316/shared-config/lint-staged.config.js')
+```
+
+Or spread / override individual globs:
+
+```js
+const base = require('@josh803316/shared-config/lint-staged.config.js')
+module.exports = {
+  ...base,
+  '*.prisma': ['prisma format'],
 }
 ```
 
-### ESLint (`eslint.config.js`)
+### Git hooks (husky)
 
-```js
-import sharedConfig from '@josh803316/shared-config/eslint.config.js';
+The `postinstall` script writes thin delegating hooks into your project's `.husky/` directory. Nothing to configure — just commit.
 
-export default [
-  ...sharedConfig,
-  {ignores: ['dist/']},
-  {
-    // project-specific overrides
-    rules: {},
-  },
-];
+If you need to re-run manually:
+
+```bash
+bun scripts/install-husky-hooks.ts          # installs / updates stale hooks
+bun scripts/install-husky-hooks.ts --force  # force-overwrites all hooks
 ```
 
-### Prettier (`prettier.config.js`)
+## Commit message format
 
-```js
-import prettier from '@josh803316/shared-config/prettier.config.js';
+```
+type[(scope)][!]: subject
 
-export default prettier;
+# Types: feat | fix | perf | chore | docs | refactor | security | style | test
+# Breaking change: add ! after type or scope
+
+feat: add campaign budget alerts
+fix(#2901): handle null session in VAST proxy
+feat!: drop Node 18 support
 ```
 
-### lint-staged (`lint-staged.config.js`)
+The `commit-msg` hook validates this automatically and prompts you to pick a type interactively if the message is missing one.
 
-```js
-import lintStaged from '@josh803316/shared-config/lint-staged.config.js';
+## Publishing
 
-export default lintStaged;
-```
-
-## Commit Message Format
-
-This package enforces [Conventional Commits](https://www.conventionalcommits.org/).
-
-**Format:** `type: subject`
-
-| Type | Purpose |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `perf` | Performance improvement |
-| `chore` | Maintenance (deps, config, tooling) |
-| `docs` | Documentation only |
-| `refactor` | Code restructure without behaviour change |
-| `security` | Security fix |
-| `style` | Formatting, whitespace |
-| `test` | Adding or updating tests |
-
-Breaking changes: append `!` after the type → `feat!: remove deprecated API`
-
-If your commit message is missing or has an invalid type, the hook will interactively prompt you to pick one.
+Releases are handled by the [shared-ci-workflows](https://github.com/josh803316/shared-ci-workflows) semantic-release workflow on every push to `main`.

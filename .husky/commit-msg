@@ -1,2 +1,2 @@
-#!/bin/sh
-bun node_modules/@josh803316/shared-config/bin/commit-msg.ts "$1"
+#\!/bin/sh
+bun bin/commit-msg.ts "$1"

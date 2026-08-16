@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    // Environment
-    "target": "ES2022",
-    "lib": ["ES2022"],
+    // Environment — Node 22+ (LTS) supports ES2024 fully
+    "target": "ES2024",
+    "lib": ["ES2024"],
 
-    // Module — Node.js CommonJS
+    // Module — Node.js CommonJS (legacy; prefer node-esm.json for new packages)
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -14,6 +14,8 @@
     // Emit
     "outDir": "dist",
     "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     "skipLibCheck": true,
 
     // Strictness
@@ -23,6 +25,8 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "allowUnusedLabels": false,
-    "allowUnreachableCode": false
+    "allowUnreachableCode": false,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   }
 }

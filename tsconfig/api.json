@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    // Bun APIs + Web Standard APIs (Request, Response, Headers, WebSocket)
+    "lib": ["ESNext", "DOM"],
+
+    // Elysia APIs don't use JSX; override base.json's react-jsx default
+    "jsx": "preserve",
+
+    // erasableSyntaxOnly: TS 7 / Go-compiler compatibility.
+    // Prohibits: const enum, namespace-with-values, parameter properties, emitDecoratorMetadata.
+    // Required for Bun --strip-types and the TS 7 Go compiler.
+    // Lives here (not base.json) so legacy repos not yet on TS7 patterns aren't forced to migrate.
+    // Migration: const enum → as const objects; constructor(private x) → explicit this.x = x
+    "erasableSyntaxOnly": true,
+
+    // Allow .js files (useful for Drizzle-generated migration files, JS config)
+    "allowJs": true,
+
+    // Strict: catch dead code in API handlers — unused variables are likely bugs
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    // noPropertyAccessFromIndexSignature: off because Drizzle ORM's query builder
+    // and Elysia's context object both use index signatures that are accessed with dot notation.
+    // Enabling this would require massive `obj["key"]` syntax throughout ORM queries.
+    "noPropertyAccessFromIndexSignature": false
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    // Bun-native scripts: ESNext only. No DOM — Bun CLIs don't have window/document.
+    // Bun's own Web-compatible APIs (fetch, Request, Response, Headers) are covered by
+    // @types/bun, not the DOM lib. Adding DOM would mask real "not available at runtime" errors.
+    "lib": ["ESNext"],
+    // Bun scripts don't use JSX; override base.json's react-jsx default
+    "jsx": "preserve",
+
+    // erasableSyntaxOnly: same rationale as api.json — opt-in at profile level, not base
+    "erasableSyntaxOnly": true,
+
+    // "bun" (not "bun-types") is the correct value for TypeScript 6.x+
+    // bun-types was the old package name; @types/bun is the npm package, but tsconfig uses "bun"
+    "types": ["bun"],
+
+    // Enforce clean code — unused locals/params are noise in scripts and tools
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}

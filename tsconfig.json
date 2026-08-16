@@ -4,7 +4,6 @@
     // Environment
     "target": "ESNext",
     "lib": ["ESNext"],
-    "types": ["bun"],
 
     // Module — bundler mode (Bun, Vite, esbuild, etc.)
     "module": "Preserve",
@@ -21,6 +20,10 @@
 
     // Type safety
     "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+
+    // Bun types (required for TypeScript 6+ when using bun APIs in scripts)
+    "types": ["bun"],
 
     // Strictness
     "strict": true,
@@ -28,6 +31,9 @@
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "erasableSyntaxOnly": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
     "allowUnusedLabels": false,
     "allowUnreachableCode": false
   }

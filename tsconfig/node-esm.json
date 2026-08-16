@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    // Node 22 LTS fully supports ES2024; use as a stable, predictable target
+    "target": "ES2024",
+    "lib": ["ES2024"],
+
+    // NodeNext: explicit .js extensions in imports required (import './foo.js')
+    // Required for packages published to npm/GitHub Packages consumed by Node.js
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // For Node ESM packages, override bundler-mode allowImportingTsExtensions
+    // NodeNext resolution doesn't allow .ts extension imports
+    "allowImportingTsExtensions": false,
+
+    "jsx": "preserve",
+
+    // Emit is on for published packages: .js output + declarations + source maps
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": false,
+
+    // isolatedDeclarations: TS 5.5+ — every exported symbol must have an explicit
+    // type annotation that doesn't require reading other files. Enables:
+    // - Parallel .d.ts generation (TS 7 Go compiler, oxc-transform)
+    // - Faster monorepo builds when this package is a dependency
+    // Cost: all exported functions/variables need explicit return/type annotations.
+    "isolatedDeclarations": true,
+
+    // rewriteRelativeImportExtensions: TS 5.7+ — rewrites .ts → .js in output.
+    // Required for NodeNext packages that use .ts extension references internally.
+    "rewriteRelativeImportExtensions": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}

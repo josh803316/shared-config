@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    // ── Target & environment ───────────────────────────────────────────────
+    // ESNext for Bun/bundler targets; override to ES2023/ES2024 in ui.json and node-esm.json
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "module": "Preserve",           // Preserves the import/require form the author writes
+    "moduleResolution": "bundler",  // Bundler-aware: resolves .ts extensions and index files
+    "moduleDetection": "force",     // Treat every file as an isolated module (no accidental globals)
+    "resolveJsonModule": true,
+
+    // ── JSX ───────────────────────────────────────────────────────────────
+    // react-jsx: modern transform, no React import needed; override to "preserve" in SSR/RSC
+    "jsx": "react-jsx",
+
+    // ── Import discipline ─────────────────────────────────────────────────
+    "allowImportingTsExtensions": true, // Import './foo.ts' directly (Bun-native, Vite-native)
+    "verbatimModuleSyntax": true,       // Enforces `import type` for type-only imports; supersedes isolatedModules
+    "noEmit": true,                     // Bun / Vite are the transpilers; tsc is type-check only
+
+    // ── Correctness ───────────────────────────────────────────────────────
+    "skipLibCheck": true,                // Avoid noise from typebox/library version skew
+    "forceConsistentCasingInFileNames": true, // Prevents macOS/Windows case-sensitivity divergence
+
+    // ── Strict type-checking ──────────────────────────────────────────────
+    "strict": true,                      // Enables all strict flags (strictNullChecks, etc.)
+    "noImplicitOverride": true,          // Derived classes must mark overrides explicitly
+    "noUncheckedIndexedAccess": true,    // arr[0] has type T | undefined (catches runtime crashes)
+    "noFallthroughCasesInSwitch": true,  // Exhaustive switch without accidental fallthrough
+    "noUncheckedSideEffectImports": true, // TS 5.6+: side-effect imports must have type info
+    "noImplicitReturns": true,           // All code paths in non-void functions must return
+    "allowUnusedLabels": false,          // Labels (rare) are almost always bugs
+    "allowUnreachableCode": false        // Dead code after return/throw is a bug
+  }
+}

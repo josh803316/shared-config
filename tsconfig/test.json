@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./node-esm.json",
+  "compilerOptions": {
+    // Test environments: Node 22 LTS.
+    // Only "node" here — each consuming repo adds its own framework types:
+    //   Playwright:  "types": ["node", "@playwright/test"]
+    //   Vitest:      "types": ["node", "vitest/globals"]
+    //   Both:        "types": ["node", "@playwright/test", "vitest/globals"]
+    // This avoids "Cannot find type definition" errors when a framework isn't installed.
+    "lib": ["ES2024"],
+    "types": ["node"],
+
+    // Test files often use direct .ts imports in co-located patterns
+    "allowImportingTsExtensions": true,
+
+    // Tests don't emit — the test runner (bun test / vitest) handles execution
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "isolatedDeclarations": false,
+    "rewriteRelativeImportExtensions": false,
+
+    // Relaxed for test authoring — test files should compile but can be less strict
+    // noUnusedLocals/Parameters can cause friction in test setup files
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  }
+}

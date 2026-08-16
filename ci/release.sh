@@ -1,11 +1,12 @@
 #!/bin/bash
 set -e
 
-if [ -z "$1" ]; then
-  echo "Error: version argument is required"
+VERSION=$1
+
+if [ -z "$VERSION" ]; then
+  echo "Usage: $0 <version>"
   exit 1
 fi
 
-version="$1"
-echo "Next release version: $version"
-echo "$version" > /tmp/pre-release.version
+echo "$VERSION" > /tmp/pre-release.version
+echo "Version $VERSION prepared for release."

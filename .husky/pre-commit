@@ -1,2 +1,2 @@
-#!/bin/sh
-bun node_modules/@josh803316/shared-config/bin/pre-commit.ts
+#\!/bin/sh
+bun bin/pre-commit.ts

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./base.json",
+  "compilerOptions": {
+    // ES2023: stable, supported in all modern browsers, avoids ESNext instability.
+    // Update to ES2024 intentionally when verifying Object.groupBy / Promise.withResolvers
+    // browser support for your target audience.
+    // DOM.Iterable: required for for-of over DOM collections (NodeList, HTMLCollection, etc.)
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "target": "ES2023",
+    "jsx": "react-jsx",
+
+    // vite/client: provides import.meta.env, import.meta.hot, asset URL types.
+    // Include this in individual project tsconfigs rather than globally if you
+    // want to keep type boundaries clean between Vite projects and non-Vite code.
+    // "types": ["vite/client"],
+
+    // Class fields: Vite uses esbuild which follows the TC39 spec for useDefineForClassFields.
+    // Must match Vite's default (true) to avoid runtime/type-check divergence with class decorators.
+    "useDefineForClassFields": true
+  }
+}

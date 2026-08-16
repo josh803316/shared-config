@@ -1,0 +1,11 @@
+---
+description: Prefer Bun and TypeScript for scripts and CI glue; avoid Python/Perl for new work.
+alwaysApply: true
+---
+
+# Scripting and automation
+
+Prefer **Bun** and **TypeScript** for scripts, CI glue, string/JSON transforms, and one-off repo tasks (for example `bun run path/to/script.ts`).
+
+Avoid **Python**, **Perl**, and similar for new work unless the environment truly cannot run Bun. Prefer extending existing TypeScript tooling in this repo over parallel utilities in other languages.
+
